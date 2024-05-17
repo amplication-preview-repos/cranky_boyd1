@@ -1,0 +1,58 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?
+  id        String   @id @default(cuid())
+  updatedAt DateTime @updatedAt
+  username  String?
+  wallets   Wallet[]
+}
+
+model Service {
+  createdAt          DateTime @default(now())
+  id                 String   @id @default(cuid())
+  serviceDescription String?
+  serviceName        String?
+  servicePrice       Float?
+  updatedAt          DateTime @updatedAt
+}
+
+model Wallet {
+  balance   Float?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model Transaction {
+  amount                 Float?
+  createdAt              DateTime                               @default(now())
+  fromWallet             String?
+  fromWalletId           String?
+  id                     String                                 @id @default(cuid())
+  toWallet               String?
+  toWalletId             String?
+  transactionAmount      Float?
+  transactionCreatedAt   DateTime?
+  transactionType        EnumTransactionTransactionType?
+  transactionTypeOptions EnumTransactionTransactionTypeOptions?
+  updatedAt              DateTime                               @updatedAt
+}
+
+enum EnumTransactionTransactionType {
+  Option1
+}
+
+enum EnumTransactionTransactionTypeOptions {
+  Option1
+}
