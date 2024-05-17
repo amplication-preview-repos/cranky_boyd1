@@ -1,0 +1,46 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Trades {
+  buyAmount  Float?
+  createdAt  DateTime @default(now())
+  id         String   @id @default(cuid())
+  pairName   String?
+  profit     Float?
+  sellAmount Float?
+  status     String?
+  updatedAt  DateTime @updatedAt
+}
+
+model LiquidityPairs {
+  createdAt    DateTime  @default(now())
+  creationDate DateTime?
+  id           String    @id @default(cuid())
+  pairName     String?
+  updatedAt    DateTime  @updatedAt
+}
+
+model Users {
+  createdAt  DateTime  @default(now())
+  email      String?
+  id         String    @id @default(cuid())
+  settings   Settings? @relation(fields: [settingsId], references: [id])
+  settingsId String?
+  updatedAt  DateTime  @updatedAt
+  username   String?
+}
+
+model Settings {
+  buyAmount    Float?
+  createdAt    DateTime @default(now())
+  id           String   @id @default(cuid())
+  targetProfit Float?
+  updatedAt    DateTime @updatedAt
+  usersItems   Users[]
+}
